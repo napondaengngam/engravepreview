@@ -1,103 +1,103 @@
 <!doctype html>
-<html lang="en">
+<html lang="th">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Engrave On Ring — Preview (Font Grid V4)</title>
+<title>Engrave On Ring — V6</title>
 
-<!-- Google fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Allura&family=Abril+Fatface&family=Dancing+Script&family=Lobster&family=Lora&family=Pacifico&family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
   :root{
-    --panel-bg: #fff;
-    --bg:#f5f5f7;
-    --text:#1d1d1f;
-    --muted:#6e6e73;
-    --accent:#0071e3;
-    --radius:12px;
-    --card-h: 96px;
+    --panel-bg:#fff; --bg:#f5f5f7; --text:#1d1d1f; --muted:#6e6e73; --accent:#0071e3; --radius:12px;
+    --card:#f1f1f4; --card-border:#d2d2d7;
   }
+  *{box-sizing:border-box}
   html,body{height:100%; margin:0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background:var(--bg); color:var(--text);}
-  .wrap { max-width:1000px; margin:18px auto; display:grid; grid-template-columns:360px 1fr; gap:18px; padding:12px; box-sizing:border-box; }
-  .panel{ background:var(--panel-bg); border-radius:var(--radius); padding:14px; border:1px solid #d2d2d7; }
-  h2{ margin:0 0 8px 0; font-size:16px; font-weight:600; }
-  label{ display:block; margin-top:10px; margin-bottom:6px; font-weight:600; font-size:13px; }
-  input[type="text"]{ width:100%; padding:10px 12px; border-radius:8px; border:1px solid #d2d2d7; font-size:15px; box-sizing:border-box; background:#fff; color:var(--text); }
-  input[type="range"]{ width:100%; }
-  .muted{ color:var(--muted); font-size:13px; margin-top:6px; }
-  .actions{ display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
-  button{ padding:10px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:600; background:var(--accent); color:white; }
-  button.secondary{ background:#e5e5ea; color:var(--text); }
-
-  .preview{ background:transparent; display:flex; align-items:center; justify-content:center; min-height:520px; border-radius:var(--radius); }
-  .stage{ position:relative; width:100%; max-width:760px; }
-  img#ringImg{ width:100%; display:block; border-radius:8px; }
-  svg.overlay{ position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
-
-  /* Font grid */
-  .font-grid{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px; margin-top:8px; }
-  @media (min-width:440px){ .font-grid{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
-  @media (min-width:720px){ .font-grid{ grid-template-columns:repeat(4,minmax(0,1fr)); } }
+  .wrap{max-width:1000px; margin:18px auto; display:grid; grid-template-columns:340px 1fr; gap:18px; padding:12px;}
+  .panel{background:var(--panel-bg); border-radius:var(--radius); padding:14px; border:1px solid #d2d2d7;}
+  h2{margin:0 0 8px 0; font-size:16px; font-weight:600;}
+  label{display:block; margin-top:10px; margin-bottom:6px; font-weight:600; font-size:13px;}
+  input[type="text"]{width:100%; padding:10px 12px; border-radius:8px; border:1px solid #d2d2d7; font-size:15px; background:#fff; color:var(--text);}
+  .muted{color:var(--muted); font-size:13px; margin-top:6px;}
+  .preview{background:transparent; display:flex; align-items:center; justify-content:center; min-height:520px; border-radius:var(--radius); position:relative;}
+  .stage{position:relative; width:100%; max-width:760px;}
+  img#ringImg{width:100%; display:block; border-radius:8px;}
+  svg.overlay{position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; overflow:visible;}
+  .toolbar{
+    position:absolute; left:0; right:0; top:-56px;
+    display:flex; align-items:center; gap:10px; padding:8px 10px;
+    background:var(--panel-bg); border:1px solid var(--card-border); border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+  }
+  .tool{display:flex; align-items:center; gap:8px; font-size:13px; white-space:nowrap;}
+  .tool input[type="range"]{width:180px;}
+  .tool .val{min-width:36px; text-align:right; font-variant-numeric:tabular-nums; color:var(--muted);}
+  /* font cards */
+  .font-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-top:8px;}
   .font-card{
-    border:1px solid #d2d2d7; border-radius:10px; padding:8px; background:#fff; cursor:pointer;
-    display:flex; flex-direction:column; align-items:center; justify-content:space-between;
-    height:var(--card-h);
-    transition:box-shadow .08s ease, border-color .08s ease, transform .08s ease;
-    outline:2px solid transparent; outline-offset:2px;
+    border:1px solid var(--card-border); background:var(--card);
+    border-radius:10px; padding:10px; cursor:pointer; user-select:none;
+    display:flex; align-items:center; justify-content:center; height:56px;
+    transition:transform .05s ease, border-color .15s ease, background .15s ease;
+    text-align:center; font-size:14px; color:var(--text);
   }
-  .font-card:hover{ transform:translateY(-1px); box-shadow:0 6px 16px rgba(0,0,0,.06); }
-  .font-card.selected{ outline-color: rgba(0,113,227,.35); border-color: var(--accent); }
-  .font-name{ font-size:12px; color:var(--muted); text-align:center; width:100%; line-height:1; margin-top:6px; }
-  .font-sample{
-    display:flex; align-items:center; justify-content:center; width:100%;
-    text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    line-height:1.2; min-height:48px;
-  }
-
-  .note{ font-size:13px; color:var(--muted); margin-top:10px; }
-  .row{ display:flex; gap:8px; align-items:center; }
-
-  /* Responsive layout */
-  @media (max-width: 780px){
-    .wrap{ grid-template-columns: 1fr; }
-    .preview{ min-height: 380px; }
-    .actions button{ flex:1 1 auto; }
+  .font-card:hover{transform:translateY(-1px);}
+  .font-card.active{outline:2px solid var(--accent); background:#eef5ff;}
+  .tip{font-size:12px; color:var(--muted); margin-top:10px;}
+  /* Responsive */
+  @media (max-width: 860px){
+    .wrap{grid-template-columns:1fr;}
+    .toolbar{position:static; margin-bottom:12px;}
+    .preview{min-height:420px;}
   }
 </style>
 </head>
 <body>
-
 <div class="wrap">
   <div class="panel" role="region" aria-label="Controls">
     <h2>Engraving Controls</h2>
-
     <label for="engraveText">Text (max 34)</label>
-    <input id="engraveText" type="text" maxlength="34" value="Forever & Ever" aria-describedby="charsLeftHelp">
-    <div id="charsLeftHelp" class="muted">Characters left: <strong id="charsLeft">0</strong></div>
-
-    <label for="fontSize">Font size: <span id="fontSizeLabel">24</span> px</label>
-    <input id="fontSize" type="range" min="10" max="48" value="24" aria-label="Font size">
+    <input id="engraveText" type="text" maxlength="34" value="Forever & Ever">
+    <div class="muted">Characters left: <strong id="charsLeft">0</strong></div>
 
     <label>Choose a font</label>
-    <div id="fontGrid" class="font-grid" role="listbox" aria-label="Font choices"></div>
-
-    <div class="actions">
-      <button id="downloadSvg">Download SVG</button>
-      <button id="resetBtn" class="secondary">Reset</button>
+    <div id="fontGrid" class="font-grid" role="listbox" aria-label="Choose a font">
+      <div class="font-card" role="option" data-family="'Allura', cursive" style="font-family:'Allura', cursive">Allura</div>
+      <div class="font-card" role="option" data-family="'Calisto MT', serif" style="font-family:'Calisto MT', serif">Calisto MT</div>
+      <div class="font-card" role="option" data-family="'Lucida Calligraphy', 'Lucida Calligraphy Italic', cursive" style="font-family:'Lucida Calligraphy', 'Lucida Calligraphy Italic', cursive">Lucida</div>
+      <div class="font-card" role="option" data-family="'Pacifico', cursive" style="font-family:'Pacifico', cursive">Pacifico</div>
+      <div class="font-card" role="option" data-family="'Playfair Display', serif" style="font-family:'Playfair Display', serif">Playfair</div>
+      <div class="font-card" role="option" data-family="'Dancing Script', cursive" style="font-family:'Dancing Script', cursive">Dancing</div>
+      <div class="font-card" role="option" data-family="'Lobster', cursive" style="font-family:'Lobster', cursive">Lobster</div>
+      <div class="font-card" role="option" data-family="'Abril Fatface', serif" style="font-family:'Abril Fatface', serif">Abril</div>
+      <div class="font-card" role="option" data-family="'Lora', serif" style="font-family:'Lora', serif">Lora</div>
+      <div class="font-card" role="option" data-family="'Poppins', sans-serif" style="font-family:'Poppins', sans-serif">Poppins</div>
+      <div class="font-card" role="option" data-family="'Quicksand', sans-serif" style="font-family:'Quicksand', sans-serif">Quicksand</div>
     </div>
-
-    <p class="note">Tip: Click a card to apply that font. The sample text mirrors what you type above.</p>
+    <div class="tip">Tip: แตะการ์ดฟอนต์เพื่อเปลี่ยนฟอนต์อย่างรวดเร็ว</div>
   </div>
 
   <div class="panel preview" role="region" aria-label="Preview">
     <div class="stage" id="stage">
+      <!-- Toolbar placed above the image -->
+      <div class="toolbar" id="toolbar">
+        <div class="tool">
+          <span>Font size:</span>
+          <input id="fontSize" type="range" min="10" max="48" value="21">
+          <span class="val"><span id="fontSizeLabel">21</span> px</span>
+        </div>
+        <div class="tool" title="ปรับละเอียดตำแหน่งแนวตั้ง">
+          <span>Fine‑tune Y:</span>
+          <input id="vOffset" type="range" min="-60" max="60" value="-6">
+          <span class="val">v: <span id="vOffsetUnit">-6</span></span>
+        </div>
+      </div>
+
       <img id="ringImg" src="ring.png" alt="ring image">
       <svg class="overlay" id="overlaySVG" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-        <defs>
-          <path id="engravePath" d="" fill="none"></path>
-        </defs>
-        <text id="svgText" style="font-size:24px; text-anchor:middle; fill:#111;">
+        <defs><path id="engravePath" d="" fill="none"></path></defs>
+        <text id="svgText" style="font-size:21px; text-anchor:middle; fill:#111;">
           <textPath id="textPath" href="#engravePath" startOffset="50%"></textPath>
         </text>
       </svg>
@@ -106,10 +106,6 @@
 </div>
 
 <script>
-/* Fixed geometry */
-const V_OFFSET = 13;
-const RY_FIXED = 90;
-
 /* Elements */
 const MAX = 34;
 const img = document.getElementById('ringImg');
@@ -120,76 +116,21 @@ const svgText = document.getElementById('svgText');
 
 const inputText = document.getElementById('engraveText');
 const charsLeft = document.getElementById('charsLeft');
+
 const fontSize = document.getElementById('fontSize');
 const fontSizeLabel = document.getElementById('fontSizeLabel');
 
-const downloadBtn = document.getElementById('downloadSvg');
-const resetBtn = document.getElementById('resetBtn');
-
-/* Fonts list */
-const FONTS = [
-  { label:'Allura', family:"'Allura', cursive" },
-  { label:'Calisto MT', family:"'Calisto MT', serif" },
-  { label:'Lucida Calligraphy Italic', family:"'Lucida Calligraphy', 'Lucida Calligraphy Italic', cursive" },
-  { label:'Pacifico', family:"'Pacifico', cursive" },
-  { label:'Playfair Display', family:"'Playfair Display', serif" },
-  { label:'Dancing Script', family:"'Dancing Script', cursive" },
-  { label:'Lobster', family:"'Lobster', cursive" },
-  { label:'Abril Fatface', family:"'Abril Fatface', serif" },
-  { label:'Lora', family:"'Lora', serif" },
-  { label:'Poppins', family:"'Poppins', sans-serif" },
-  { label:'Quicksand', family:"'Quicksand', sans-serif" }
-];
+const vOffset = document.getElementById('vOffset');
+const vOffsetUnit = document.getElementById('vOffsetUnit');
 
 const fontGrid = document.getElementById('fontGrid');
-let selectedFamily = FONTS[0].family;
-
-function renderFontGrid(sampleText){
-  fontGrid.innerHTML = '';
-  FONTS.forEach((f) => {
-    const card = document.createElement('button');
-    card.type = 'button';
-    card.className = 'font-card' + (f.family === selectedFamily ? ' selected' : '');
-    card.setAttribute('role','option');
-    card.setAttribute('aria-selected', f.family === selectedFamily ? 'true' : 'false');
-    card.dataset.family = f.family;
-
-    const sample = document.createElement('div');
-    sample.className = 'font-sample';
-    sample.style.fontFamily = f.family;
-    sample.textContent = sampleText || inputText.value || 'Sample';
-
-    const name = document.createElement('div');
-    name.className = 'font-name';
-    name.textContent = f.label;
-
-    card.appendChild(sample);
-    card.appendChild(name);
-
-    card.addEventListener('click', () => {
-      selectedFamily = f.family;
-      updateSelectedCard();
-      updateSVG();
-    });
-
-    fontGrid.appendChild(card);
-  });
-}
-
-function updateSelectedCard(){
-  [...fontGrid.querySelectorAll('.font-card')].forEach(card => {
-    const isSel = card.dataset.family === selectedFamily;
-    card.classList.toggle('selected', isSel);
-    card.setAttribute('aria-selected', isSel ? 'true' : 'false');
-  });
-}
 
 /* initial UI values */
 charsLeft.textContent = MAX - (inputText.value?.length || 0);
 fontSizeLabel.textContent = fontSize.value;
-renderFontGrid();
+vOffsetUnit.textContent = vOffset.value;
 
-/* Build arc and place text */
+/* Compute arc path inside ring */
 function updateSVG() {
   const w = img.clientWidth || img.width;
   const h = img.clientHeight || img.height;
@@ -197,85 +138,67 @@ function updateSVG() {
   svg.setAttribute('height', h);
   svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
 
+  // padding left/right to avoid edges of ring reflection
   const padding = Math.max(18, w * 0.12);
-  const leftX = padding;
-  const rightX = w - padding;
 
-  const baseCenterY = h * 0.52;
-  const centerY = baseCenterY + (V_OFFSET/100) * h;
+  const leftX = padding+60;
+  const rightX = w - (padding+60);
 
+  // base center chosen for this ring photo; vertical offset slider moves it
+  const baseCenterY = h * 0.58;
+
+  const v = Number(vOffset.value); // -60..60
+  // centerY computed in px: baseCenterY + (v/100) * h
+  const centerY = baseCenterY + (v/100) * h;
+
+  // rx: half width between left & right
   const rx = (rightX - leftX) / 2;
-  const ry = RY_FIXED;
+  // ry controlled by user for "tightness"
+  const ry = 40; // keep stable; users adjust size/vertical only here
 
+  // Build arc d (left to right). sweep-flag=0 so upper arc
   const d = `M ${leftX.toFixed(2)} ${centerY.toFixed(2)} A ${rx.toFixed(2)} ${ry.toFixed(2)} 0 0 1 ${rightX.toFixed(2)} ${centerY.toFixed(2)}`;
   pathEl.setAttribute('d', d);
 
+  // update text content and style
   let txt = inputText.value || '';
-  if (txt.length > MAX) { txt = txt.slice(0, MAX); inputText.value = txt; }
+  if (txt.length > MAX) {
+    txt = txt.slice(0, MAX);
+    inputText.value = txt;
+  }
   textPath.textContent = txt;
   charsLeft.textContent = MAX - txt.length;
 
-  svgText.style.fontFamily = selectedFamily;
+  // font size already bound
   svgText.style.fontSize = fontSize.value + 'px';
-
-  // Measure natural length first (no adjust)
-  svgText.removeAttribute('lengthAdjust');
-  svgText.removeAttribute('textLength');
-  const naturalLength = svgText.getComputedTextLength();
-
-  // Safe target length (keep margin L * 0.82)
-  const L = pathEl.getTotalLength();
-  const safe = L * 0.82;
-
-  if (naturalLength > safe && txt.length > 0) {
-    // Adjust spacing only (no glyph scaling)
-    svgText.setAttribute('lengthAdjust','spacing');
-    svgText.setAttribute('textLength', safe.toFixed(2));
-  } else {
-    svgText.removeAttribute('lengthAdjust');
-    svgText.removeAttribute('textLength');
-  }
 }
 
-/* events */
-inputText.addEventListener('input', () => { renderFontGrid(inputText.value); updateSVG(); });
-fontSize.addEventListener('input', ()=>{ fontSizeLabel.textContent = fontSize.value; updateSVG(); });
-window.addEventListener('resize', ()=>{ setTimeout(updateSVG, 50); });
-img.addEventListener('load', ()=>{ setTimeout(updateSVG, 30); });
+/* font cards logic */
+function setActiveFontCard(card){
+  [...fontGrid.querySelectorAll('.font-card')].forEach(c=>c.classList.remove('active'));
+  card.classList.add('active');
+  const family = card.getAttribute('data-family');
+  svgText.style.fontFamily = family;
+}
 
-/* download svg with embedded base64 image for portability */
-downloadBtn.addEventListener('click', ()=>{
-  const cloned = svg.cloneNode(true);
-  const imgTag = document.createElementNS('http://www.w3.org/2000/svg','image');
-  imgTag.setAttributeNS(null,'href', '' || img.getAttribute('src'));
-  imgTag.setAttribute('x','0');
-  imgTag.setAttribute('y','0');
-  imgTag.setAttribute('width', svg.getAttribute('width'));
-  imgTag.setAttribute('height', svg.getAttribute('height'));
-  cloned.insertBefore(imgTag, cloned.firstChild);
-
-  const family = window.getComputedStyle(svgText).fontFamily;
-  const size = window.getComputedStyle(svgText).fontSize;
-  const txtEl = cloned.querySelector('#svgText');
-  txtEl.setAttribute('style', `font-size:${size}; text-anchor:middle; font-family:${family}; fill:#111;`);
-
-  const serializer = new XMLSerializer();
-  const str = serializer.serializeToString(cloned);
-  const blob = new Blob([str], {type: 'image/svg+xml;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = 'engraving_on_ring.svg'; document.body.appendChild(a); a.click();
-  setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 1500);
-});
-
-/* reset */
-resetBtn.addEventListener('click', ()=>{
-  inputText.value = 'Forever & Ever';
-  fontSize.value = 24;
-  fontSizeLabel.textContent = 24;
-  selectedFamily = FONTS[0].family;
-  renderFontGrid(inputText.value);
+fontGrid.addEventListener('click', (e)=>{
+  const card = e.target.closest('.font-card');
+  if (!card) return;
+  setActiveFontCard(card);
   updateSVG();
 });
+
+/* Default active font = first card */
+setActiveFontCard(fontGrid.querySelector('.font-card[data-family]'));
+
+/* Listeners */
+inputText.addEventListener('input', updateSVG);
+fontSize.addEventListener('input', ()=>{ fontSizeLabel.textContent = fontSize.value; updateSVG(); });
+vOffset.addEventListener('input', ()=>{ vOffsetUnit.textContent = vOffset.value; updateSVG(); });
+
+/* image load and resize */
+img.addEventListener('load', ()=>{ setTimeout(updateSVG, 30); });
+window.addEventListener('resize', ()=>{ setTimeout(updateSVG, 50); });
 
 /* init */
 if (img.complete) { updateSVG(); }
